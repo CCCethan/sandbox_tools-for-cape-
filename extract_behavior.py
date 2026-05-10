@@ -26,7 +26,7 @@ def extract_dynamic_analysis(input_file, output_file):
     #抽出したい項目を整理
     extracted_output = {
             "info": data.get("info", {}),
-            "target": data.get("target, {}"),
+            "target": data.get("target", {}),
             "behavior": behavior_data,
             "network": data.get("network", {}),
             "dropped": data.get("dropped", [])
