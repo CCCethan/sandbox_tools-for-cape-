@@ -121,3 +121,146 @@ python3 extract_logs.py report.json -o debug_logs.txt
 ```
 
 The extracted logs can be used for malware analysis, debugging CAPEv2 executions, and identifying behavioral indicators.
+
+
+## Signature Matching
+
+`signature_matching.py` provides a simple YARA-like signature matching framework for evaluating behavior-based signatures against CAPEv2 analysis reports.
+
+The tool loads a YARA rule file and matches it against either a single JSON report or a directory containing multiple JSON reports.
+
+---
+
+### Supported Rule Format
+
+Example rule:
+
+```yara
+rule antivirus_from_registry
+{
+    strings:
+        $display = "DisplayName" nocase
+
+    condition:
+        $display
+}
+```
+
+Currently supported features:
+
+* Rule name extraction
+* String matching
+* `and`, `or`, `not` conditions
+* Case-insensitive matching via JSON text search
+
+---
+
+### Single Report Evaluation
+
+Evaluate a signature against a single behavior report.
+
+```bash
+python3 signature_matching.py \
+    -r test_yara_registry.yar \
+    -j behaviors/460_report_behavior.json
+```
+
+Example output:
+
+```text
+Rule: antivirus_from_registry
+File: behaviors/460_report_behavior.json
+Matched: True
+```
+
+---
+
+### Batch Evaluation
+
+Evaluate a signature against all JSON files within a directory.
+
+```bash
+python3 signature_matching.py \
+    -r test_yara_registry.yar \
+    -d behaviors/
+```
+
+Example output:
+
+```text
+===== RESULT =====
+Rule Name      : antivirus_from_registry
+Total Samples  : 100
+Matched        : 37
+Not Matched    : 63
+Match Rate     : 37.00%
+==================
+```
+
+---
+
+### Arguments
+
+| Argument            | Description                       |
+| ------------------- | --------------------------------- |
+| `-r`, `--rule`      | Path to the YARA rule file        |
+| `-j`, `--json`      | Path to a single JSON report      |
+| `-d`, `--directory` | Directory containing JSON reports |
+
+**Note:** Either `--json` or `--directory` must be specified.
+
+---
+
+### Evaluation Metrics
+
+The batch evaluation mode provides:
+
+| Metric        | Description                                  |
+| ------------- | -------------------------------------------- |
+| Total Samples | Number of JSON reports processed             |
+| Matched       | Number of reports matching the signature     |
+| Not Matched   | Number of reports not matching the signature |
+| Match Rate    | Percentage of reports matching the signature |
+
+---
+
+### Example Workflow
+
+1. Extract behavior data from CAPEv2 reports
+
+```bash
+python3 extract_behavior.py reports/ -o behaviors
+```
+
+2. Create a signature rule
+
+```yara
+rule antivirus_from_registry
+{
+    strings:
+        $display = "DisplayName" nocase
+
+    condition:
+        $display
+}
+```
+
+3. Evaluate the signature
+
+```bash
+python3 signature_matching.py \
+    -r antivirus_registry.yar \
+    -d behaviors/
+```
+
+4. Analyze the results
+
+```text
+Total Samples : 100
+Matched       : 37
+Not Matched   : 63
+Match Rate    : 37.00%
+```
+
+This workflow can be used to evaluate manually generated behavior signatures and assess their effectiveness against CAPEv2 behavioral analysis reports.
+
