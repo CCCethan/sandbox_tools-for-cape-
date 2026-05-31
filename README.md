@@ -1,29 +1,26 @@
-# CAPEv2 Report Processing Utilities
+## Batch Extraction Utilities
 
-A collection of Python utilities for extracting and preprocessing information from CAPEv2 `report.json` files.
+This repository provides two utilities for processing CAPEv2 analysis reports:
 
-These tools are designed to support malware behavior analysis, behavioral signature generation, threat hunting research, and machine learning-based malware detection.
+* `extract_behavior.py` — Extracts behavior-related information from CAPEv2 JSON reports.
+* `extract_logs.py` — Extracts debug log information from CAPEv2 JSON reports.
 
 ---
 
-## Included Tools
+## Behavior Extraction
 
-### 1. Dynamic Analysis Extractor
-
-E## Batch Behavior Extraction
-
-Extract the behavior section from multiple CAPEv2 `report.json` files at once.
+Extract the dynamic analysis (`behavior`) section from multiple CAPEv2 JSON reports.
 
 ### Usage
 
 ```bash
-python3 extract_behavior_batch.py <input_directory>
+python3 extract_behavior.py <input_directory>
 ```
 
 Example:
 
 ```bash
-python3 extract_behavior_batch.py reports/
+python3 extract_behavior.py reports/
 ```
 
 By default, extracted files are saved to:
@@ -32,14 +29,12 @@ By default, extracted files are saved to:
 behaviors/
 ```
 
----
-
 ### Specify Output Directory
 
 You can specify a custom output directory using the `-o` or `--output` option.
 
 ```bash
-python3 extract_behavior_batch.py reports/ -o extracted_behaviors
+python3 extract_behavior.py reports/ -o extracted_behaviors
 ```
 
 Output:
@@ -51,20 +46,16 @@ extracted_behaviors/
 └── sample3_behavior.json
 ```
 
----
-
 ### Arguments
 
-| Argument | Description |
-|-----------|-------------|
-| `input_dir` | Directory containing CAPEv2 JSON reports |
+| Argument         | Description                                                          |
+| ---------------- | -------------------------------------------------------------------- |
+| `input_dir`      | Directory containing CAPEv2 JSON reports                             |
 | `-o`, `--output` | Output directory for extracted behavior files (default: `behaviors`) |
-
----
 
 ### Example Workflow
 
-1. Collect CAPEv2 reports
+Input:
 
 ```text
 reports/
@@ -73,13 +64,13 @@ reports/
 └── sample3.json
 ```
 
-2. Extract behavior data
+Command:
 
 ```bash
-python3 extract_behavior_batch.py reports/ -o behaviors
+python3 extract_behavior.py reports/ -o behaviors
 ```
 
-3. Generated files
+Output:
 
 ```text
 behaviors/
@@ -88,165 +79,45 @@ behaviors/
 └── sample3_behavior.json
 ```
 
-These extracted behavior files can then be used for signature generation and signature matching experiments.
+These extracted behavior files can be used for malware behavior analysis, signature generation, and signature matching experiments.
 
-### 2. Debug Log Extractor
+---
 
-Extracts entries from the `debug` section of a CAPEv2 report.
+## Debug Log Extraction
 
-#### Usage
+Extract debug-related log entries from CAPEv2 JSON reports.
+
+### Usage
 
 ```bash
-python extract_logs.py report.json
+python3 extract_logs.py report.json
 ```
 
-Save output to a file:
+Example:
 
 ```bash
-python extract_debug.py report.json -o debug.logs
+python3 extract_logs.py report.json
 ```
 
-#### Example Output
-
-```text
-[ERRORS]API timeout
-[ERRORS]Connection failed
-[INFO:sandbox]CAPE
-[INFO:version]2.4
-```
-
-#### Output Format
-
-##### List Entries
-
-```text
-[FIELD_NAME]value
-```
-
-##### Dictionary Entries
-
-```text
-[FIELD_NAME:subkey]value
-```
-
-##### Single Values
-
-```text
-[FIELD_NAME]value
-```
-
----
-
-## Requirements
-
-* Python 3.6+
-* No external dependencies required
-
----
-
-## Example Workflow
-
-### Step 1: Extract Dynamic Analysis Data
+### Save Output to a File
 
 ```bash
-python extract_dynamic_analysis.py \
-    -i report.json \
-    -o dynamic_analysis.json
+python3 extract_logs.py report.json -o debug_logs.txt
 ```
 
-Output:
+### Arguments
+
+| Argument         | Description                          |
+| ---------------- | ------------------------------------ |
+| `report`         | Path to a CAPEv2 JSON report         |
+| `-o`, `--output` | Output file for extracted debug logs |
+
+### Example Output
 
 ```text
-dynamic_analysis.json
+[ERRORS] Example error message
+[WARNINGS] Example warning message
+[ANALYSIS] Example analysis message
 ```
 
-containing:
-
-* Behavioral activity
-* Process information
-* Network activity
-* Dropped files
-
----
-
-### Step 2: Extract Debug Logs
-
-```bash
-python extract_debug.py \
-    report.json \
-    -o debug.logs
-```
-
-Output:
-
-```text
-debug.logs
-```
-
-containing:
-
-* Sandbox debug information
-* Execution errors
-* Internal CAPEv2 messages
-
----
-
-## Error Handling
-
-### Missing Input File
-
-```text
-Error: report.json not found.
-```
-
-### Invalid JSON Format
-
-```text
-Error decoding JSON: ...
-```
-
-### Missing Behavior Section
-
-```text
-Warning: No dynamic analysis (behavior) data found in this report.
-```
-
-### Missing Debug Section
-
-```text
-[!] No debug logs found
-```
-
----
-
-## Research Applications
-
-These utilities are particularly useful for:
-
-* Malware behavioral analysis
-* Behavioral signature engineering
-* Sandbox evasion analysis
-* CAPEv2 report preprocessing
-* Feature extraction for machine learning
-* LLM-based malware analysis
-* Automated signature generation research
-
----
-
-## Project Structure
-
-```text
-project/
-├── extract_dynamic_analysis.py
-├── extract_debug.py
-├── report.json
-├── dynamic_analysis.json
-├── debug.logs
-└── README.md
-```
-
----
-
-## License
-
-This project is provided for educational, research, and malware analysis purposes.
+The extracted logs can be used for malware analysis, debugging CAPEv2 executions, and identifying behavioral indicators.
