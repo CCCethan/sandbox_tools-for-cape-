@@ -10,45 +10,85 @@ These tools are designed to support malware behavior analysis, behavioral signat
 
 ### 1. Dynamic Analysis Extractor
 
-Extracts the most relevant dynamic analysis artifacts from a CAPEv2 report.
+E## Batch Behavior Extraction
 
-#### Extracted Sections
+Extract the behavior section from multiple CAPEv2 `report.json` files at once.
 
-* `info`
-* `target`
-* `behavior`
-* `network`
-* `dropped`
-
-#### Usage
+### Usage
 
 ```bash
-python extract_dynamic_analysis.py -i report.json -o dynamic_analysis.json
+python3 extract_behavior_batch.py <input_directory>
 ```
 
-#### Example Output
+Example:
 
-```json
-{
-    "info": {},
-    "target": {},
-    "behavior": {},
-    "network": {},
-    "dropped": []
-}
+```bash
+python3 extract_behavior_batch.py reports/
 ```
 
-#### Purpose
+By default, extracted files are saved to:
 
-The extracted JSON can be used for:
-
-* Malware behavior analysis
-* Behavioral signature generation
-* Machine learning feature extraction
-* Threat hunting research
-* Dataset preparation
+```text
+behaviors/
+```
 
 ---
+
+### Specify Output Directory
+
+You can specify a custom output directory using the `-o` or `--output` option.
+
+```bash
+python3 extract_behavior_batch.py reports/ -o extracted_behaviors
+```
+
+Output:
+
+```text
+extracted_behaviors/
+├── sample1_behavior.json
+├── sample2_behavior.json
+└── sample3_behavior.json
+```
+
+---
+
+### Arguments
+
+| Argument | Description |
+|-----------|-------------|
+| `input_dir` | Directory containing CAPEv2 JSON reports |
+| `-o`, `--output` | Output directory for extracted behavior files (default: `behaviors`) |
+
+---
+
+### Example Workflow
+
+1. Collect CAPEv2 reports
+
+```text
+reports/
+├── sample1.json
+├── sample2.json
+└── sample3.json
+```
+
+2. Extract behavior data
+
+```bash
+python3 extract_behavior_batch.py reports/ -o behaviors
+```
+
+3. Generated files
+
+```text
+behaviors/
+├── sample1_behavior.json
+├── sample2_behavior.json
+└── sample3_behavior.json
+```
+
+These extracted behavior files can then be used for signature generation and signature matching experiments.
 
 ### 2. Debug Log Extractor
 
@@ -57,7 +97,7 @@ Extracts entries from the `debug` section of a CAPEv2 report.
 #### Usage
 
 ```bash
-python extract_debug.py report.json
+python extract_logs.py report.json
 ```
 
 Save output to a file:
