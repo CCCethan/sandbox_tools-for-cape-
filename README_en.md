@@ -34,14 +34,6 @@ xcode-select --install
 python3 windows_sdk_api_stats.py <source_code_directory> --output result.json --jobs 8
 ```
 
-Example:
-
-```bash
-python3 /Users/takabayashirizumu/Documents/Codex/2026-06-19/k/outputs/windows_sdk_api_stats.py \
-  "/Users/takabayashirizumu/Downloads/matsuzawa-hikitsugi-main/1. PoC本体（ソースコード・実行ファイル）/ソースコード/3_ビルド・実行可能・サンドボックス検知精度を確認した1520件/source_codes/" \
-  --output /Users/takabayashirizumu/Documents/Codex/2026-06-19/k/outputs/windows_sdk_api_stats_1520.json \
-  --jobs 8
-```
 
 You can also pass multiple source directories.
 
@@ -298,28 +290,3 @@ The comparison output includes:
 - `GetProcAddress` string targets from headers not included in the SDK registry may not be recognized.
 - Calls introduced by macro expansion may be counted even if the API name is not written directly at the call site.
 
-## Result for the 1520-File Dataset
-
-For `windows_sdk_api_stats_1520.json`, the result was:
-
-```text
-Parsed files              : 1520/1520
-Unique Windows SDK APIs   : 545
-Total calls/references    : 14446
-Direct calls              : 14398
-GetProcAddress targets    : 48
-```
-
-Top APIs:
-
-```text
-GetLastError          1948
-CoUninitialize        1393
-CloseHandle           1201
-GetTickCount64         623
-RegCloseKey            427
-VariantClear           330
-CoInitializeEx         268
-WaitForSingleObject    240
-CoCreateInstance       231
-```
