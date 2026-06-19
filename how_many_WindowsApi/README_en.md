@@ -56,30 +56,7 @@ If you need APIs from additional SDK headers, pass them explicitly.
 python3 windows_sdk_api_stats.py src --sdk-header d3d11.h --sdk-header wlanapi.h
 ```
 
-## Output JSON Format
 
-Example:
-
-```json
-{
-  "source_files_found": 1520,
-  "source_files_parsed": 1520,
-  "source_files_failed": 0,
-  "sdk_function_names": 8105,
-  "api_count": 545,
-  "direct_call_count": 14398,
-  "dynamic_call_count": 48,
-  "total_call_count": 14446,
-  "apis": [
-    {
-      "api": "GetLastError",
-      "total_count": 1948,
-      "direct_count": 1948,
-      "dynamic_count": 0
-    }
-  ]
-}
-```
 
 Top-level fields:
 
